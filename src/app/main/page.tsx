@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { chat } from "../utils/chat";
 
 const Main = () => {
   const [history, setHistory] = useState<{ role: string; content: string }[]>(
@@ -16,8 +15,18 @@ const Main = () => {
     setHistory((prev) => [...prev, userMessage]);
 
     try {
-      const villagerResponse = await chat(input);
-      const villagerMessage = { role: "assistant", content: villagerResponse };
+      const villagerResponse = await fetch("/api/chat", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: input }),
+      });
+      const { message } = await villagerResponse.json();
+      const villagerMessage = {
+        role: "assistant",
+        content: message,
+      };
       setHistory((prev) => [...prev, villagerMessage]);
     } catch (error) {
       console.error("API 요청 중 오류 발생:", error);
