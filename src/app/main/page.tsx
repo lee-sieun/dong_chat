@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { chat } from "../utils/chat";
+import { InputWithButton } from "../components/InputButton";
 
 const Main = () => {
   const [history, setHistory] = useState<{ role: string; content: string }[]>(
@@ -16,8 +17,11 @@ const Main = () => {
     setHistory((prev) => [...prev, userMessage]);
 
     try {
-      const villagerResponse = await chat(input);
-      const villagerMessage = { role: "assistant", content: villagerResponse };
+      // const villagerResponse = await chat(input);
+      const villagerMessage = {
+        role: "assistant",
+        content: "villagerResponse",
+      };
       setHistory((prev) => [...prev, villagerMessage]);
     } catch (error) {
       console.error("API 요청 중 오류 발생:", error);
@@ -51,8 +55,14 @@ const Main = () => {
           </p>
         ))}
       </div>
-      <div style={{ marginTop: "10px" }}>
-        <input
+      <InputWithButton
+        buttonText="Send"
+        onSubmit={(value) => {
+          setInput(value);
+          handleSend();
+        }}
+      />
+      {/* <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -60,8 +70,7 @@ const Main = () => {
         />
         <button onClick={handleSend} style={{ padding: "10px" }}>
           보내기
-        </button>
-      </div>
+        </button> */}
     </div>
   );
 };
