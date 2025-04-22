@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { chat } from "../utils/chat";
 import { InputWithButton } from "../components/InputButton";
+import { ScrollArea } from "#/components/ui/scroll-area";
 
 const Main = () => {
   const [history, setHistory] = useState<{ role: string; content: string }[]>(
@@ -35,16 +36,12 @@ const Main = () => {
     setInput("");
   };
   return (
-    <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
+    <div
+      style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}
+      className="flex gap-5 flex-col"
+    >
       <h1>동물의 숲 제시카와 대화하기</h1>
-      <div
-        style={{
-          border: "1px solid #ccc",
-          padding: "10px",
-          height: "400px",
-          overflowY: "auto",
-        }}
-      >
+      <ScrollArea className="h-150  rounded-md border">
         {history.map((his, index) => (
           <p
             key={index}
@@ -54,7 +51,7 @@ const Main = () => {
             {his.content}
           </p>
         ))}
-      </div>
+      </ScrollArea>
       <InputWithButton
         buttonText="Send"
         onSubmit={(value) => {

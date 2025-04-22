@@ -10,7 +10,7 @@ interface InputButtonProps {
 export function InputWithButton({ buttonText, onSubmit }: InputButtonProps) {
   const [input, setInput] = useState("");
   return (
-    <div className="flex w-full max-w-sm items-center space-x-2">
+    <div className="flex w-full items-center space-x-2 gap-4 mt-[4]">
       <Input
         type="text"
         placeholder="type somethings..."
