@@ -16,21 +16,23 @@ export function InputWithButton({ buttonText, onSubmit }: InputButtonProps) {
   };
 
   const handleOnKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    e.stopPropagation();
     if (e.key === "Enter") {
       handleOnSubmit();
     }
   };
+
   return (
     <div className="flex w-full items-center space-x-2 gap-4 mt-[4]">
       <Input
         type="text"
         value={input}
         placeholder="type somethings..."
-        onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleOnKeyDown}
+        onChange={(e) => setInput(e.target.value)}
       />
       <Button
-        size="sm"
+        size="default"
         type="submit"
         variant="outline"
         onClick={handleOnSubmit}

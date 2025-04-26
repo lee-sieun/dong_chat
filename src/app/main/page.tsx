@@ -10,9 +10,8 @@ const Main = () => {
   const [history, setHistory] = useState<{ role: string; content: string }[]>(
     []
   );
-  const [input, setInput] = useState<string>("");
 
-  const handleSend = async () => {
+  const handleSend = async (input: string) => {
     if (!input.trim()) return;
 
     const userMessage = { role: "user", content: input };
@@ -33,8 +32,6 @@ const Main = () => {
       };
       setHistory((prev) => [...prev, errorMessage]);
     }
-
-    setInput("");
   };
   return (
     <div
@@ -61,7 +58,7 @@ const Main = () => {
                 }
               />
               <p
-                className={`p-2 rounded-lg text-amber-50 font-medium text-xs whitespace-preline ${
+                className={`p-2 rounded-lg text-neutral-50 font-medium text-xs whitespace-preline ${
                   isMe ? "bg-blue-300" : "bg-red-300"
                 }`}
               >
@@ -75,8 +72,7 @@ const Main = () => {
       <InputWithButton
         buttonText="Send"
         onSubmit={(value) => {
-          setInput(value);
-          handleSend();
+          handleSend(value);
         }}
       />
     </div>
