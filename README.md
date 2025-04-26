@@ -38,3 +38,15 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 # using
 
 - node version 18.18.0
+
+### TODO List
+
+- enter -> 스크롤 영역 하단 포커싱
+- 스타일 통일
+- 프로필 변경
+- 다크/라이트 모드
+- 닌텐도 API 연동
+
+### Bugs
+
+- enter -> 메시지 두 개 보내지는 현상
