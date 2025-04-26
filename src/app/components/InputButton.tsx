@@ -15,7 +15,7 @@ export function InputWithButton({ buttonText, onSubmit }: InputButtonProps) {
     setInput("");
   };
 
-  const handleOnKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
+  const handleOnKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleOnSubmit();
     }
@@ -27,13 +27,13 @@ export function InputWithButton({ buttonText, onSubmit }: InputButtonProps) {
         value={input}
         placeholder="type somethings..."
         onChange={(e) => setInput(e.target.value)}
+        onKeyDown={handleOnKeyDown}
       />
       <Button
         size="sm"
         type="submit"
         variant="outline"
         onClick={handleOnSubmit}
-        onKeyDown={handleOnKeyDown}
       >
         {buttonText}
       </Button>
