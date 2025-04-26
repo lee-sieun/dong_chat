@@ -59,15 +59,6 @@ const Main = () => {
           handleSend();
         }}
       />
-      {/* <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          style={{ width: "calc(100% - 50px)", padding: "10px" }}
-        />
-        <button onClick={handleSend} style={{ padding: "10px" }}>
-          보내기
-        </button> */}
     </div>
   );
 };
