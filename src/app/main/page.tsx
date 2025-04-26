@@ -3,15 +3,15 @@
 import { useState } from "react";
 import { chat } from "../utils/chat";
 import { InputWithButton } from "../components/InputButton";
+import { Avatar } from "../components/Avatar";
 import { ScrollArea } from "#/components/ui/scroll-area";
 
 const Main = () => {
   const [history, setHistory] = useState<{ role: string; content: string }[]>(
     []
   );
-  const [input, setInput] = useState<string>("");
 
-  const handleSend = async () => {
+  const handleSend = async (input: string) => {
     if (!input.trim()) return;
 
     const userMessage = { role: "user", content: input };
@@ -32,8 +32,6 @@ const Main = () => {
       };
       setHistory((prev) => [...prev, errorMessage]);
     }
-
-    setInput("");
   };
   return (
     <div
@@ -41,33 +39,42 @@ const Main = () => {
       className="flex gap-5 flex-col"
     >
       <h1>동물의 숲 제시카와 대화하기</h1>
-      <ScrollArea className="h-150  rounded-md border">
-        {history.map((his, index) => (
-          <p
-            key={index}
-            style={{ textAlign: his.role === "user" ? "right" : "left" }}
-          >
-            <strong>{his.role === "user" ? "나" : "제시카"}:</strong>{" "}
-            {his.content}
-          </p>
-        ))}
+
+      <ScrollArea className="h-150  rounded-md border w-[100%] p-2.5">
+        {history.map((his, index) => {
+          const isMe = his.role === "user";
+          return (
+            <div
+              key={`${chat}_${index}`}
+              className={`flex gap-1 items-center  ${
+                his.role === "user" ? "flex-row-reverse" : "flex-row"
+              } `}
+            >
+              <Avatar
+                src={
+                  isMe
+                    ? "https://i.pinimg.com/474x/3d/95/0b/3d950ba473ba1ffe53c4b812f8d4d9ae.jpg"
+                    : "https://i.pinimg.com/474x/43/86/6e/43866ea58f03a072282bb6df06bc16d7.jpg"
+                }
+              />
+              <p
+                className={`p-2 rounded-lg text-neutral-50 font-medium text-xs whitespace-preline ${
+                  isMe ? "bg-blue-300" : "bg-red-300"
+                }`}
+              >
+                {his.content}
+              </p>
+            </div>
+          );
+        })}
       </ScrollArea>
+
       <InputWithButton
         buttonText="Send"
         onSubmit={(value) => {
-          setInput(value);
-          handleSend();
+          handleSend(value);
         }}
       />
-      {/* <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          style={{ width: "calc(100% - 50px)", padding: "10px" }}
-        />
-        <button onClick={handleSend} style={{ padding: "10px" }}>
-          보내기
-        </button> */}
     </div>
   );
 };
