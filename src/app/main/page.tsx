@@ -14,8 +14,8 @@ const Main = () => {
   const handleSend = async (input: string) => {
     if (!input.trim()) return;
 
-    const userMessage = { role: "user", content: input };
-    setHistory((prev) => [...prev, userMessage]);
+    const uerMessage = { role: "user", content: input };
+    setHistory((prev) => [...prev, uerMessage]);
 
     try {
       // const villagerResponse = await chat(input);
@@ -46,9 +46,8 @@ const Main = () => {
           return (
             <div
               key={`${chat}_${index}`}
-              className={`flex gap-1 items-center  ${
-                his.role === "user" ? "flex-row-reverse" : "flex-row"
-              } `}
+              className={`flex gap-1 items-center  ${his.role === "user" ? "flex-row-reverse" : "flex-row"
+                } `}
             >
               <Avatar
                 src={
@@ -58,9 +57,8 @@ const Main = () => {
                 }
               />
               <p
-                className={`p-2 rounded-lg text-neutral-50 font-medium text-xs whitespace-preline ${
-                  isMe ? "bg-blue-300" : "bg-red-300"
-                }`}
+                className={`p-2 rounded-lg text-neutral-50 font-medium text-xs whitespace-preline ${isMe ? "bg-blue-300" : "bg-red-300"
+                  }`}
               >
                 {his.content}
               </p>
