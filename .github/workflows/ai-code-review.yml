@@ -20,12 +20,13 @@ jobs:
         run: |
           git fetch origin ${{ github.event.pull_request.base.ref }}
           git diff origin/${{ github.event.pull_request.base.ref }} > diff.txt
-
+          
       - name: Send diff to OpenAI API
         id: review
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
+          sudo apt-get install -y jq
           DIFF=$(cat diff.txt)
           REVIEW=$(curl -s https://api.openai.com/v1/chat/completions \
             -H "Content-Type: application/json" \
@@ -33,7 +34,7 @@ jobs:
             -d "{
               \"model\": \"gpt-4o-mini\",
               \"messages\": [
-                {\"role\": \"system\", \"content\": \"당신은 숙련된 코드 리뷰어입니다. PR diff를 보고 개선점, 위험 요소, 코드 스타일 피드백을 제공합니다.\"},
+                {\"role\": \"system\", \"content\": \"당신은 숙련된 코드 리뷰어입니다.\"},
                 {\"role\": \"user\", \"content\": \"${DIFF}\"}
               ]
             }" | jq -r '.choices[0].message.content')
