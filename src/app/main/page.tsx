@@ -19,11 +19,11 @@ const Main = () => {
 
     try {
       // const villagerResponse = await chat(input);
-      const villagerMessage = {
+      const villagersssResponse = {
         role: "assistant",
         content: "villagerResponse",
-      };
-      setHistory((prev) => [...prev, villagerMessage]);
+      }
+      setHistory((prev) => [...prev, villagersssResponse]);
     } catch (error) {
       console.error("API 요청 중 오류 발생:", error);
       const errorMessage = {
