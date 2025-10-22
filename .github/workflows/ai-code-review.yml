@@ -26,18 +26,19 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          sudo apt-get install -y jq
           DIFF=$(cat diff.txt)
-          REVIEW=$(curl -s https://api.openai.com/v1/chat/completions \
-            -H "Content-Type: application/json" \
-            -H "Authorization: Bearer $OPENAI_API_KEY" \
-            -d "{
-              \"model\": \"gpt-4o-mini\",
-              \"messages\": [
-                {\"role\": \"system\", \"content\": \"당신은 숙련된 코드 리뷰어입니다.\"},
-                {\"role\": \"user\", \"content\": \"${DIFF}\"}
-              ]
-            }" | jq -r '.choices[0].message.content')
+          RESPONSE=$(jq -n \
+            --arg model "gpt-4o-mini" \
+            --arg system "당신은 숙련된 코드 리뷰어입니다. PR diff를 보고 개선점, 위험 요소, 코드 스타일 피드백을 제공합니다." \
+            --arg user "$DIFF" \
+            '{model: $model, messages: [{role: "system", content: $system}, {role: "user", content: $user}]}' |
+            curl -s https://api.openai.com/v1/chat/completions \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer '"$OPENAI_API_KEY"'" \
+              -d @-)
+
+          echo "$RESPONSE" | jq .
+          REVIEW=$(echo "$RESPONSE" | jq -r '.choices[0].message.content')
           echo "review=$REVIEW" >> $GITHUB_OUTPUT
 
       - name: Post review comment
