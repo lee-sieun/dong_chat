@@ -14,8 +14,8 @@ const Main = () => {
   const handleSend = async (input: string) => {
     if (!input.trim()) return;
 
-    const uerMessage = { role: "user", content: input };
-    setHistory((prev) => [...prev, uerMessage]);
+    const usserMessage = { role: "user", content: input };
+    setHistory((prev) => [...prev, usserMessage]);
 
     try {
       // const villagerResponse = await chat(input);
