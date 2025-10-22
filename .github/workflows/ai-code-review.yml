@@ -1,48 +1,23 @@
-name: AI Code Review
+#-- .github/workflows/main.yml
+name: AI Code Reviewer
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
-
+    types:
+      - opened
+      - synchronize
+permissions: write-all
 jobs:
   review:
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-      contents: read
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Checkout Repo
+        uses: actions/checkout@v3
 
-      - name: Get PR diff
-        id: diff
-        run: |
-          git fetch origin ${{ github.event.pull_request.base.ref }}
-          git diff origin/${{ github.event.pull_request.base.ref }} > diff.txt
-          
-      - name: Send diff to OpenAI API
-        id: review
-        env:
+      - name: AI Code Reviewer
+        uses: lee-sieun/dong_chat@main
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # The GITHUB_TOKEN is there by default so you just need to keep it like it is and not necessarily need to add it as secret as it will throw an error. [More Details](https://docs.github.com/en/actions/security-guides/automatic-token-authentication#about-the-github_token-secret)
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          DIFF=$(cat diff.txt)
-          RESPONSE=$(jq -n \
-            --arg model "gpt-4o-mini" \
-            --arg system "당신은 숙련된 코드 리뷰어입니다. PR diff를 보고 개선점, 위험 요소, 코드 스타일 피드백을 제공합니다." \
-            --arg user "$DIFF" \
-            '{model: $model, messages: [{role: "system", content: $system}, {role: "user", content: $user}]}' |
-            curl -s https://api.openai.com/v1/chat/completions \
-              -H "Content-Type: application/json" \
-              -H "Authorization: Bearer '"$OPENAI_API_KEY"'" \
-              -d @-)
-
-          echo "$RESPONSE" | jq .
-          REVIEW=$(echo "$RESPONSE" | jq -r '.choices[0].message.content')
-          echo "review=$REVIEW" >> $GITHUB_OUTPUT
-
-      - name: Post review comment
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh pr comment ${{ github.event.pull_request.number }} --body "${{ steps.review.outputs.review }}"
+          OPENAI_API_MODEL: "gpt-4" # Optional: defaults to "gpt-4"
+          exclude: "**/*.json, **/*.md" # Optional: exclude patterns separated by commas
